@@ -36,6 +36,8 @@
         body { font-family: 'Inter', sans-serif; }
         .brand { font-family: 'Cormorant Garamond', serif; }
         .hero-text-shadow { text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #root:empty { background: #020617; height: 100vh; display: flex; align-items: center; justify-content: center; color: #c5a059; font-size: 12px; letter-spacing: 0.2em; }
+        #root:empty::after { content: 'ZARA ONLINE | CARREGANDO...'; }
     </style>
 <script type="importmap">
 {
@@ -52,5 +54,12 @@
 </head>
 <body class="bg-slate-50 text-midnight dark:bg-midnight-dark dark:text-slate-100 antialiased transition-colors duration-500">
     <div id="root"></div>
+    <!-- Script de entrada corrigido para caminho relativo -->
+    <script type="module" src="./index.tsx"></script>
+    <script>
+      window.onerror = function(message, source, lineno, colno, error) {
+        console.error('CRITICAL UI ERROR:', message, 'at', source, lineno + ':' + colno);
+      };
+    </script>
 </body>
 </html>

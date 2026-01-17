@@ -1,8 +1,13 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://qisslybwcpuhxlbblgnb.supabase.co';
-const supabaseAnonKey = 'sb_publishable_jfazcycPh7dPskcCLk9juw_RTD0qEkG';
+// Usando variáveis de ambiente para evitar erros de deploy e aumentar segurança
+const supabaseUrl = process.env.SUPABASE_URL || 'https://qisslybwcpuhxlbblgnb.supabase.co';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'sb_publishable_jfazcycPh7dPskcCLk9juw_RTD0qEkG';
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('SUPABASE: Chaves de API não encontradas. Certifique-se de configurar SUPABASE_URL e SUPABASE_ANON_KEY no Netlify.');
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -51,6 +56,4 @@ CREATE POLICY "Acesso Público Leitura" ON orders FOR SELECT USING (true);
 CREATE POLICY "Acesso Público Escrita" ON orders FOR ALL USING (true);
 CREATE POLICY "Acesso Público Leitura" ON clicks FOR SELECT USING (true);
 CREATE POLICY "Acesso Público Escrita" ON clicks FOR INSERT WITH CHECK (true);
-
--- Nota: Para o Storage, crie o bucket 'product-images' manualmente no painel do Supabase e defina-o como público.
 `;
