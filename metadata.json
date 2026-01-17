@@ -1,0 +1,7 @@
+{
+  "name": "Zara Online - Premium Fashion Store",
+  "description": "Uma loja de moda minimalista de alta qualidade onde os pedidos são processados via WhatsApp. Inclui painel administrativo e catálogo responsivo.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
