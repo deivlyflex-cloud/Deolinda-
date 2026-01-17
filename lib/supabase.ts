@@ -1,12 +1,23 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// Usando variáveis de ambiente para evitar erros de deploy e aumentar segurança
-const supabaseUrl = process.env.SUPABASE_URL || 'https://qisslybwcpuhxlbblgnb.supabase.co';
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'sb_publishable_jfazcycPh7dPskcCLk9juw_RTD0qEkG';
+// Função segura para obter variáveis de ambiente sem quebrar o navegador
+const getEnv = (key: string, fallback: string) => {
+  try {
+    // Tenta acessar via process.env (Node/Build time) ou window (Browser runtime)
+    return (typeof process !== 'undefined' && process.env?.[key]) || 
+           (window as any)._env_?.[key] || 
+           fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const supabaseUrl = getEnv('SUPABASE_URL', 'https://qisslybwcpuhxlbblgnb.supabase.co');
+const supabaseAnonKey = getEnv('SUPABASE_ANON_KEY', 'sb_publishable_jfazcycPh7dPskcCLk9juw_RTD0qEkG');
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('SUPABASE: Chaves de API não encontradas. Certifique-se de configurar SUPABASE_URL e SUPABASE_ANON_KEY no Netlify.');
+  console.warn('SUPABASE: Chaves de API não detectadas. O app usará os fallbacks de produção.');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

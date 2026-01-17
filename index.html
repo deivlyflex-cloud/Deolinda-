@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script>
+      // Shim global para evitar erros de ReferenceError em bibliotecas que esperam Node.js
+      window.process = { env: {} };
+      
       tailwind.config = {
         darkMode: 'class',
         theme: {
@@ -33,11 +36,14 @@
       }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background: #020617; }
         .brand { font-family: 'Cormorant Garamond', serif; }
-        .hero-text-shadow { text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        #root:empty { background: #020617; height: 100vh; display: flex; align-items: center; justify-content: center; color: #c5a059; font-size: 12px; letter-spacing: 0.2em; }
-        #root:empty::after { content: 'ZARA ONLINE | CARREGANDO...'; }
+        #root:empty { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c5a059; }
+        #root:empty::before { content: ''; width: 40px; height: 40px; border: 2px solid #c5a059; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        #root:empty::after { content: 'ZARA ONLINE | ESTABELECENDO CONEXÃO...'; font-size: 10px; letter-spacing: 0.4em; font-weight: 900; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        #error-overlay { display: none; position: fixed; inset: 0; background: #1a0000; color: #ff5555; padding: 40px; z-index: 9999; font-family: monospace; overflow: auto; }
     </style>
 <script type="importmap">
 {
@@ -54,12 +60,32 @@
 </head>
 <body class="bg-slate-50 text-midnight dark:bg-midnight-dark dark:text-slate-100 antialiased transition-colors duration-500">
     <div id="root"></div>
-    <!-- Script de entrada corrigido para caminho relativo -->
-    <script type="module" src="./index.tsx"></script>
+    <div id="error-overlay">
+      <h1 style="font-size: 24px; margin-bottom: 20px;">ERRO DE INICIALIZAÇÃO</h1>
+      <pre id="error-content"></pre>
+      <button onclick="location.reload()" style="margin-top: 20px; background: #ff5555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Tentar Novamente</button>
+    </div>
+
+    <!-- Script de entrada com tratamento de erro global -->
+    <script type="module">
+      import "./index.tsx";
+    </script>
+
     <script>
       window.onerror = function(message, source, lineno, colno, error) {
-        console.error('CRITICAL UI ERROR:', message, 'at', source, lineno + ':' + colno);
+        const overlay = document.getElementById('error-overlay');
+        const content = document.getElementById('error-content');
+        if (overlay && content) {
+          overlay.style.display = 'block';
+          content.textContent = `Mensagem: ${message}\nFonte: ${source}\nLinha: ${lineno}:${colno}\n\nStack Trace:\n${error?.stack || 'N/A'}`;
+        }
+        console.error('CRITICAL UI ERROR:', message);
       };
+      
+      // Capturar erros de módulos não encontrados ou falhas de rede
+      window.addEventListener('unhandledrejection', function (event) {
+        console.error('Unhandled promise rejection:', event.reason);
+      });
     </script>
 </body>
 </html>
