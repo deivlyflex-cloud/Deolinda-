@@ -4,29 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zara Online | Loja Oficial</title>
+    <title>Zara Online | Premium Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
+            colors: {
+              midnight: {
+                DEFAULT: '#0f172a',
+                dark: '#020617',
+                light: '#1e293b'
+              },
+              gold: {
+                DEFAULT: '#c5a059',
+                light: '#e2c275',
+                dark: '#a6823e'
+              }
+            },
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
-              serif: ['Playfair+Display', 'serif'],
+              serif: ['Cormorant Garamond', 'serif'],
             },
           },
         },
       }
     </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        h1, h2, h3, .brand {
-            font-family: 'Playfair+Display', serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .brand { font-family: 'Cormorant Garamond', serif; }
+        .hero-text-shadow { text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     </style>
 <script type="importmap">
 {
@@ -41,7 +50,7 @@
 }
 </script>
 </head>
-<body class="bg-white text-black dark:bg-zinc-950 dark:text-zinc-50 antialiased transition-colors duration-300">
+<body class="bg-slate-50 text-midnight dark:bg-midnight-dark dark:text-slate-100 antialiased transition-colors duration-500">
     <div id="root"></div>
 </body>
 </html>
