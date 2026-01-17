@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script>
-      // Shim global para evitar erros de ReferenceError em bibliotecas que esperam Node.js
+      // Shim global preventivo para compatibilidade com bibliotecas Node-dependents
       window.process = { env: {} };
       
       tailwind.config = {
@@ -48,12 +48,14 @@
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
     "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.45.1"
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.45.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
@@ -66,10 +68,8 @@
       <button onclick="location.reload()" style="margin-top: 20px; background: #ff5555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Tentar Novamente</button>
     </div>
 
-    <!-- Script de entrada com tratamento de erro global -->
-    <script type="module">
-      import "./index.tsx";
-    </script>
+    <!-- Importante: Usar caminho relativo direto para o arquivo principal -->
+    <script type="module" src="./index.tsx"></script>
 
     <script>
       window.onerror = function(message, source, lineno, colno, error) {
@@ -77,14 +77,11 @@
         const content = document.getElementById('error-content');
         if (overlay && content) {
           overlay.style.display = 'block';
-          content.textContent = `Mensagem: ${message}\nFonte: ${source}\nLinha: ${lineno}:${colno}\n\nStack Trace:\n${error?.stack || 'N/A'}`;
+          content.textContent = `Erro: ${message}\nLocal: ${source}\nLinha: ${lineno}:${colno}\n\nStack:\n${error?.stack || 'N/A'}`;
         }
-        console.error('CRITICAL UI ERROR:', message);
       };
-      
-      // Capturar erros de módulos não encontrados ou falhas de rede
       window.addEventListener('unhandledrejection', function (event) {
-        console.error('Unhandled promise rejection:', event.reason);
+        console.error('Promessa rejeitada não tratada:', event.reason);
       });
     </script>
 </body>

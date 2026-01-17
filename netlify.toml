@@ -1,7 +1,7 @@
 
 [build]
   publish = "."
-  command = "echo 'Deploying Zara Online Static Assets...'"
+  command = "echo 'Iniciando Deploy Zara Online...'"
 
 [[redirects]]
   from = "/*"
